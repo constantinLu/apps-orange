@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>core-payments</module>
         <module>rouber</module>
+        <module>core-payments</module>
     </modules>
 
     <properties>

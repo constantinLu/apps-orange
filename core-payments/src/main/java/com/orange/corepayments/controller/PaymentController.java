@@ -4,9 +4,9 @@ import com.orange.corepayments.client.CorePaymentDto;
 import com.orange.corepayments.client.CorePaymentResponse;
 import com.orange.corepayments.client.PaymentDto;
 import com.orange.corepayments.service.PaymentService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.Assert;
@@ -31,14 +31,14 @@ public class PaymentController {
     }
 
 
-    @ApiOperation(value = "List of payments with statuses", notes = "Receives driver`s payments")
+    @Operation(summary = "List of payments with statuses. Receives driver`s payments")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CorePaymentResponse readPayments(@RequestParam List<String> requestIds) {
@@ -56,14 +56,14 @@ public class PaymentController {
     }
 
 
-    @ApiOperation(value = "Authorize payment", notes = "Receives an unprocessed payment which will be AUTHORIZED")
+    @Operation(summary = "Authorize payment. Receives an unprocessed payment which will be AUTHORIZED")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @Async
     @PostMapping
@@ -74,14 +74,14 @@ public class PaymentController {
     }
 
 
-    @ApiOperation(value = "Confirmation of payment", notes = "Receives an authorized payment which will be CONFIRMED")
+    @Operation(summary = "Confirmation of payment. Receives an authorized payment which will be CONFIRMED")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @Async
     @PutMapping
