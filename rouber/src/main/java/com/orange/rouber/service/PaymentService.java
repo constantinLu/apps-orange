@@ -32,7 +32,7 @@ public class PaymentService {
     public Payment createPayment(Trip trip) {
         final var unProcessedPayment = CorePaymentDto.builder()
                 .amount(processAuthorizationAmount(trip.getPrice()))
-                .requestId(UUID.randomUUID())
+                .requestId(UUID.randomUUID().toString())
                 .paymentStatus(UNPROCESSED)
                 .reason(Optional.of("Start of trip authorization"))
                 .build();

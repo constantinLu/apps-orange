@@ -23,7 +23,7 @@ public class PaymentDto {
 
     private Trip trip;
 
-    private UUID requestId;
+    private String requestId;
 
     public Optional<LocalDateTime> getStartInitiation() {
         return Optional.ofNullable(startInitiation);

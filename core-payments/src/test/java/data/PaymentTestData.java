@@ -22,7 +22,7 @@ public interface PaymentTestData {
                 .reward(null)
                 .createdDate(dateTimeNow)
                 .updatedDate(null)
-                .requestId(UUID.randomUUID())
+                .requestId(UUID.randomUUID().toString())
                 .paymentStatus(PaymentStatus.builder()
                         .type(PENDING_AUTHORIZATION)
                         .build());

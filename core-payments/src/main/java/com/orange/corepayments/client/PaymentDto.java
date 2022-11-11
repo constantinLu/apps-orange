@@ -22,7 +22,7 @@ public class PaymentDto {
 
     private BigDecimal reward;
 
-    private UUID requestId;
+    private String requestId;
 
     private PaymentStatusType paymentStatus;
 

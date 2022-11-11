@@ -20,7 +20,7 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public List<Payment> findPayments(List<UUID> requestIds) {
+    public List<Payment> findPayments(List<String> requestIds) {
         return paymentRepository.findByRequestIdIn(requestIds);
     }
 

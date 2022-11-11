@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.orange.corepayments.client.PaymentStatusType.PENDING_AUTHORIZATION;
 import static com.orange.corepayments.client.PaymentStatusType.PENDING_CONFIRMATION;
@@ -37,18 +36,18 @@ public class Payment {
     @JoinColumn(name = "status_id")
     private PaymentStatus paymentStatus;
 
-    LocalDateTime updatedDate;
+    private LocalDateTime updatedDate;
 
-    LocalDateTime createdDate;
+    private LocalDateTime createdDate;
 
-    private UUID requestId;
+    private String requestId;
 
 
     public Optional<String> getReason() {
         return Optional.ofNullable(reason);
     }
 
-    public Payment authorizePayment(BigDecimal amount, UUID requestId) {
+    public Payment authorizePayment(BigDecimal amount, String requestId) {
         return Payment.builder()
                 .amount(amount)
                 .requestId(requestId)

@@ -23,7 +23,7 @@ public class CorePaymentDto implements Serializable {
 
     BigDecimal reward;
 
-    UUID requestId;
+    String requestId;
 
     PaymentStatusType paymentStatus;
 

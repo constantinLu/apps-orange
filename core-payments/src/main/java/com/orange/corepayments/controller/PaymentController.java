@@ -13,8 +13,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.orange.corepayments.client.PaymentStatusType.PENDING_AUTHORIZATION;
 import static com.orange.corepayments.client.PaymentStatusType.UNPROCESSED;
@@ -42,14 +40,7 @@ public class PaymentController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CorePaymentResponse readPayments(@RequestParam List<String> requestIds) {
-        final var uuids = requestIds.stream()
-                .map(r -> {
-                    var uid = r.replace("[", "").replace("]", "");
-                    return UUID.fromString(uid);
-                })
-                .collect(Collectors.toList());
-
-        final var payments = paymentService.findPayments(uuids);
+        final var payments = paymentService.findPayments(requestIds);
         return CorePaymentResponse.builder()
                 .payments(toCorePaymentDtos(payments))
                 .build();

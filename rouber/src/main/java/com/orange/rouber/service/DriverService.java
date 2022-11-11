@@ -23,7 +23,7 @@ public class DriverService {
         return driverRepository.findById(driverId).orElseThrow();
     }
 
-    protected void processDriverRating(Long driverId) {
+    public void processDriverRating(Long driverId) {
         final var driver = getDriver(driverId);
 
         final var size = driver.getTrips()

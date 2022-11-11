@@ -30,7 +30,7 @@ public class Payment {
 
     private LocalDateTime endConfirmation;
 
-    private UUID requestId;
+    private String requestId;
 
     @OneToOne(mappedBy = "payment", cascade = ALL)
     private Trip trip;

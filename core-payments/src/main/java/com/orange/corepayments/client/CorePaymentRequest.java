@@ -1,9 +1,11 @@
 package com.orange.corepayments.client;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,5 +13,5 @@ import java.util.UUID;
 @Builder
 public class CorePaymentRequest {
 
-    private List<UUID> requestIds;
+    private List<String> requestIds;
 }

@@ -12,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -40,14 +39,14 @@ public class CorePaymentService {
         return restTemplate.exchange(CORE_PAYMENTS, PUT, requestEntity, CorePaymentDto.class);
     }
 
-    public ResponseEntity<CorePaymentResponse> getPayments(List<UUID> requestIds) {
+    public ResponseEntity<CorePaymentResponse> getPayments(List<String> requestIds) {
         final var httpEntity = new HttpEntity<>(header());
         String url = UriComponentsBuilder.fromHttpUrl(CORE_PAYMENTS)
                 .queryParam("requestIds", "{requestIds}")
                 .encode()
                 .toUriString();
 
-        Map<String, List<UUID>> params = new HashMap<>();
+        Map<String, List<String>> params = new HashMap<>();
         params.put("requestIds", requestIds);
 
         return restTemplate.exchange(url, GET, httpEntity, CorePaymentResponse.class, params);
