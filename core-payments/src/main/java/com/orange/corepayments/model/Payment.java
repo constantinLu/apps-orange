@@ -19,7 +19,6 @@ import static com.orange.corepayments.client.PaymentStatusType.PENDING_CONFIRMAT
 @NoArgsConstructor
 @Getter
 @Builder
-@Table(name = "payments")
 @Entity(name = "payments")
 public class Payment {
 
