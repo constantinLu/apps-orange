@@ -1,13 +1,13 @@
 package com.orange.rouber.model;
 
 
+import com.orange.rouber.client.corepayments.PaymentStatusType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -35,6 +35,10 @@ public class Payment {
     @OneToOne(mappedBy = "payment", cascade = ALL)
     private Trip trip;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id")
+    private PaymentStatus paymentStatus;
+
 
     public Optional<LocalDateTime> getStartInitiation() {
         return Optional.ofNullable(startInitiation);
@@ -45,18 +49,29 @@ public class Payment {
     }
 
 
-    public Payment confirmPayment(BigDecimal amount, LocalDateTime endConfirmation) {
-        return Payment.builder()
-                .id(this.getId())
-                .paidPrice(amount)
-                .trip(this.getTrip())
-                .startInitiation(this.startInitiation)
+    public Payment confirm(LocalDateTime endConfirmation, PaymentStatusType status) {
+        return paymentCopy()
                 .endConfirmation(endConfirmation)
-                .requestId(this.getRequestId())
+                .paymentStatus(status.value())
                 .build();
     }
 
+    public Payment authorize(PaymentStatusType status) {
+        return paymentCopy()
+                .paymentStatus(status.value())
+                .build();
+    }
 
+    private Payment.PaymentBuilder paymentCopy() {
+        return Payment.builder()
+                .id(this.id)
+                .paidPrice(this.paidPrice)
+                .trip(this.trip)
+                .startInitiation(this.startInitiation)
+                .endConfirmation(endConfirmation)
+                .requestId(this.requestId)
+                .paymentStatus(this.paymentStatus);
+    }
 }
 
 

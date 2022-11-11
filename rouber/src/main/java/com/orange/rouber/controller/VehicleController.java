@@ -6,6 +6,8 @@ import com.orange.rouber.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +15,13 @@ import java.util.List;
 
 import static com.orange.rouber.converter.Converters.toVehicleDtos;
 
+@RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/vehicles")
 public class VehicleController {
 
     private final VehicleService vehicleService;
-
-    public VehicleController(VehicleService vehicleService) {
-        this.vehicleService = vehicleService;
-    }
 
 
     @Operation(summary = "Registers a vehicle. Vehicle registration")

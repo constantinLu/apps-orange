@@ -6,8 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.net.URI;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -24,5 +23,10 @@ public class ApplicationConfiguration {
                 .externalDocs(new ExternalDocumentation()
                         .description("SpringShop Wiki Documentation")
                         .url("https://springshop.wiki.github.org/docs"));
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

@@ -82,6 +82,16 @@ CREATE TABLE public.trips
                 ON DELETE NO ACTION
 );
 
+
+DROP TABLE IF EXISTS public.payments_status CASCADE;
+CREATE TABLE public.payments_status
+(
+    type            varchar(50) NOT NULL UNIQUE,
+
+    CONSTRAINT status_pkey PRIMARY KEY (type)
+
+);
+
 -- PAYMENTS ---
 DROP TABLE IF EXISTS public.payments;
 CREATE TABLE public.payments
@@ -90,9 +100,14 @@ CREATE TABLE public.payments
     paid_price          numeric(20, 2) NOT NULL,
     start_initiation    timestamp NOT NULL,
     end_confirmation    timestamp,
-    request_id          UUID NOT NULL,
+    request_id          varchar(40) NOT NULL,
+    status_id           varchar(40) NOT NULL DEFAULT 'UNPROCESSED',
 
-    CONSTRAINT payments_pkey PRIMARY KEY (id)
+    CONSTRAINT payments_pkey PRIMARY KEY (id),
+    CONSTRAINT payments_status_fk FOREIGN KEY (status_id)
+              REFERENCES public.payments_status (type) MATCH SIMPLE
+              ON UPDATE NO ACTION
+              ON DELETE NO ACTION
 );
 
 

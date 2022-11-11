@@ -3,16 +3,17 @@ package com.orange.rouber.service;
 import com.orange.rouber.model.Driver;
 import com.orange.rouber.model.Trip;
 import com.orange.rouber.repository.DriverRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+
+@RequiredArgsConstructor
+@Slf4j
 @Service
 public class DriverService {
 
     private final DriverRepository driverRepository;
-
-    public DriverService(DriverRepository driverRepository) {
-        this.driverRepository = driverRepository;
-    }
 
     public void registerDriver(Driver driver) {
         driverRepository.save(driver);

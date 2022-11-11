@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.UUID;
 
 import static com.orange.corepayments.converter.Converter.toPayment;
 
@@ -36,7 +35,7 @@ public class PaymentService {
 
         var payment = paymentRepository.save(paymentEntity.authorizePayment(paymentEntity.getAmount(), paymentEntity.getRequestId()));
 
-        clientNotifierService.notifyTransactionComplete(paymentRequest.getCallbackUrl(), payment);
+        clientNotifierService.notifyTransactionComplete(payment);
     }
 
     @Async
@@ -46,19 +45,17 @@ public class PaymentService {
         var paymentEntity = toPayment(paymentRequest);
 
         // heavy processing here....
-        sleep(2000);
+        sleep(1050);
 
         paymentEntity = paymentRepository.save(paymentEntity.confirmPayment(paymentEntity));
-        clientNotifierService.notifyTransactionComplete(paymentRequest.getCallbackUrl(), paymentEntity);
+        clientNotifierService.notifyTransactionComplete(paymentEntity);
     }
 
     private void sleep(int miliseconds) {
         try {
             Thread.sleep(miliseconds);
         } catch (InterruptedException e) {
-
             throw new RuntimeException(e);
         }
     }
-
 }

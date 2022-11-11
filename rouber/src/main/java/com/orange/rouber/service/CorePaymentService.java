@@ -2,6 +2,8 @@ package com.orange.rouber.service;
 
 import com.orange.rouber.client.corepayments.CorePaymentDto;
 import com.orange.rouber.client.corepayments.CorePaymentResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +18,14 @@ import java.util.Map;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+@RequiredArgsConstructor
+@Slf4j
 @Service
 public class CorePaymentService {
 
     private static final String CORE_PAYMENTS = "http://localhost:8082/payments";
 
     private final RestTemplate restTemplate;
-
-    public CorePaymentService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
 
     public ResponseEntity<CorePaymentDto> authorizePayment(CorePaymentDto unprocessedPayment) {

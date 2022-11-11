@@ -3,6 +3,8 @@ package com.orange.rouber.service;
 import com.orange.rouber.model.Vehicle;
 import com.orange.rouber.repository.DriverRepository;
 import com.orange.rouber.repository.VehicleRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,17 +12,14 @@ import java.util.List;
 import static com.orange.rouber.model.Vehicle.State.ACTIVE;
 import static com.orange.rouber.model.Vehicle.State.INACTIVE;
 
+@RequiredArgsConstructor
+@Slf4j
 @Service
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
 
     private final DriverRepository driverRepository;
-
-    public VehicleService(VehicleRepository vehicleRepository, DriverRepository driverRepository) {
-        this.vehicleRepository = vehicleRepository;
-        this.driverRepository = driverRepository;
-    }
 
     public void registerVehicle(Vehicle vehicle, Long driverId) {
         final var driver = driverRepository.findById(driverId).orElseThrow();

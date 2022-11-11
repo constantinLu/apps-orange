@@ -25,8 +25,6 @@ public class CorePaymentDto {
 
     private PaymentStatusType paymentStatus;
 
-    private String callbackUrl;
-
     private LocalDateTime updatedDate;
 
     private LocalDateTime createdDate;

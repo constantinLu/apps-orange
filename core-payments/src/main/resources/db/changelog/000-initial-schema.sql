@@ -16,8 +16,8 @@ CREATE TABLE public.payments
     reason          varchar(100),
     created_date    timestamp NOT NULL,
     updated_date    timestamp,
+    request_id      varchar(40) NOT NULL,
     status_id       varchar(40) NOT NULL DEFAULT 'UNPROCESSED',
-    request_id      UUID NOT NULL,
 
     CONSTRAINT payments_pkey PRIMARY KEY (id),
     CONSTRAINT payments_status_fk FOREIGN KEY (status_id)

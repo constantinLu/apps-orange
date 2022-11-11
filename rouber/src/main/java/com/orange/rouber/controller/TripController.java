@@ -7,6 +7,8 @@ import com.orange.rouber.service.TripService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -19,15 +21,13 @@ import java.util.List;
 import static com.orange.rouber.converter.Converters.toTrip;
 import static com.orange.rouber.converter.Converters.toTripDtos;
 
+@RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/trips")
 public class TripController {
 
     TripService tripService;
-
-    public TripController(TripService tripService) {
-        this.tripService = tripService;
-    }
 
 
     @Operation(summary = "All available trips. Get the list of available trips")
@@ -96,7 +96,7 @@ public class TripController {
     }
 
 
-    @Operation(summary = "Creates a trip. Used for triggering the start of the trip and the end. " +
+    @Operation(summary = "Updates a trip with driver id. Used for triggering the start of the trip and end of the trip. " +
             "Based on request param: START/STOP values")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),

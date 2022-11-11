@@ -23,6 +23,11 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(ValidationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleNullPointerException(IllegalArgumentException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

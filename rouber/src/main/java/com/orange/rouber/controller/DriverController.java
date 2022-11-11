@@ -9,6 +9,8 @@ import com.orange.rouber.service.TripService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 
 import static com.orange.rouber.converter.Converters.*;
 
+@RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/drivers")
 public class DriverController {
@@ -25,10 +29,6 @@ public class DriverController {
 
     private final TripService tripService;
 
-    public DriverController(DriverService driverService, TripService tripService) {
-        this.driverService = driverService;
-        this.tripService = tripService;
-    }
 
     @Operation(summary = "Register a driver")
     @ApiResponses(value = {
@@ -84,6 +84,15 @@ public class DriverController {
     }
 
 
+    @Operation(summary = "GET Driver Info Profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("{driverId}/profile")
     public DriverProfileDto getDriveProfileInfo(@PathVariable Long driverId) {
         final var driver = driverService.getDriver(driverId);

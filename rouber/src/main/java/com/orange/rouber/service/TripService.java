@@ -4,6 +4,8 @@ import com.orange.rouber.client.TripStatistics;
 import com.orange.rouber.model.Trip;
 import com.orange.rouber.repository.TripRepository;
 import com.orange.rouber.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -17,6 +19,9 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.*;
 
+
+@RequiredArgsConstructor
+@Slf4j
 @Service
 public class TripService {
 
@@ -28,13 +33,6 @@ public class TripService {
 
     private final PaymentService paymentService;
 
-    public TripService(TripRepository tripRepository, UserRepository userRepository, DriverService driverService,
-                       PaymentService paymentService) {
-        this.tripRepository = tripRepository;
-        this.userRepository = userRepository;
-        this.driverService = driverService;
-        this.paymentService = paymentService;
-    }
 
     public void createTrip(Trip trip, Long userId) {
         final var user = userRepository.findById(userId).orElseThrow();
@@ -70,6 +68,7 @@ public class TripService {
     public void endTrip(Long tripId, Long driverId) {
         final var currentTrip = tripRepository.findById(tripId).orElseThrow();
         Assert.isTrue(currentTrip.getAssignedTo().getId().equals(driverId), "Driver must be the same");
+
         paymentService.confirmPayment(currentTrip.getPayment().getId());
 
         currentTrip.setEndTrip(LocalDateTime.now());

@@ -16,6 +16,7 @@ public class Converter {
                 .reward(paymentDto.getReward())
                 .reason(paymentDto.getReason().orElse(null))
                 .requestId(paymentDto.getRequestId())
+                .createdDate(paymentDto.getCreatedDate())
                 .paymentStatus(PaymentStatus.builder()
                         .type(paymentDto.getPaymentStatus())
                         .build())

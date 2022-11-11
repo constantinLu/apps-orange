@@ -11,4 +11,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findPaymentByTrip_assignedTo_id(Long driverId);
 
+    Payment findByRequestId(String requestId);
+
 }

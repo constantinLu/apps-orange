@@ -2,4 +2,6 @@ databaseChangeLog:
   - include:
       file: classpath*:db/changelog/000-initial-schema.sql
   - include:
+      file: classpath*:db/changelog/data/init-data.sql
+  - include:
       file: classpath*:db/changelog/data/test-data.sql
