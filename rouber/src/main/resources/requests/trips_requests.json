@@ -1,0 +1,12 @@
+//post
+{
+  "price": "11.00",
+  "rating": "2",
+  "start_lat": "1123124.5342",
+  "start_long": "3414235.5453",
+  "end_lat": "88865.555",
+  "end_long": "85787.634",
+  "requestedByUser": "1"
+}
+
+//put
