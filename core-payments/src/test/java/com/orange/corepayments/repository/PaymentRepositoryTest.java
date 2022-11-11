@@ -28,7 +28,6 @@ class PaymentRepositoryTest implements PaymentTestData {
 
         //then
         Assertions.assertEquals(result.getRequestId(), requestId);
-
     }
 
     @Test
