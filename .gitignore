@@ -27,7 +27,7 @@ target/
 /.nb-gradle/
 build/
 
-### VS Code ###
+### VS responseCode ###
 .vscode/
 
 .mvn

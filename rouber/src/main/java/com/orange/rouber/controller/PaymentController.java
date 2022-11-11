@@ -2,9 +2,9 @@ package com.orange.rouber.controller;
 
 import com.orange.rouber.client.corepayments.CorePaymentDto;
 import com.orange.rouber.service.PaymentService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +22,14 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @ApiOperation(value = "GET List of payments", notes = "Payment info and statuses for each driver")
+    @Operation(summary = "GET List of payments. Payment info and statuses for each driver")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/driver/{driverId}")
     List<CorePaymentDto> readDriverPayments(@PathVariable Long driverId) {

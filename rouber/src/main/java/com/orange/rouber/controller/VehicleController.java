@@ -3,9 +3,9 @@ package com.orange.rouber.controller;
 import com.orange.rouber.client.VehicleDto;
 import com.orange.rouber.converter.Converters;
 import com.orange.rouber.service.VehicleService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +24,14 @@ public class VehicleController {
     }
 
 
-    @ApiOperation(value = "Registers a vehicle", notes = "Vehicle registration")
+    @Operation(summary = "Registers a vehicle. Vehicle registration")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated"),
+            @ApiResponse(responseCode = "403", description = "Not authorized"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,15 +39,6 @@ public class VehicleController {
         vehicleService.registerVehicle(Converters.toVehicle(vehicleDto), vehicleDto.getOwnerId());
     }
 
-    @ApiOperation(value = "Gets list of vehicle history", notes = "Gets the list of vehicles used by the driver in the past (INACTIVE)")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Not authorized"),
-            @ApiResponse(code = 404, message = "Data not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
-    })
     @GetMapping("/history")
     public List<VehicleDto> getVehicleHistory() {
         return toVehicleDtos(vehicleService.getVehicleHistory());
