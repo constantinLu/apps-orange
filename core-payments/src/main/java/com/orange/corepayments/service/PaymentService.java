@@ -1,40 +1,64 @@
 package com.orange.corepayments.service;
 
+import com.orange.corepayments.client.CorePaymentDto;
+import com.orange.corepayments.client.PaymentDto;
 import com.orange.corepayments.model.Payment;
 import com.orange.corepayments.repository.PaymentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static com.orange.corepayments.client.PaymentStatusType.PENDING_AUTHORIZATION;
-import static com.orange.corepayments.client.PaymentStatusType.UNPROCESSED;
+import static com.orange.corepayments.converter.Converter.toPayment;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-
-    public PaymentService(PaymentRepository paymentRepository) {
-        this.paymentRepository = paymentRepository;
-    }
+    private final ClientNotifierService clientNotifierService;
 
     public List<Payment> findPayments(List<String> requestIds) {
         return paymentRepository.findByRequestIdIn(requestIds);
     }
 
-    public Payment authorizePayment(Payment incomingPayment) {
-        Assert.isTrue(incomingPayment.getPaymentStatus().getType().equals(UNPROCESSED), "Incoming Payment should be UNPROCESSED");
+    @Async
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void authorizePayment(CorePaymentDto paymentRequest) {
 
-        return paymentRepository.save(incomingPayment.authorizePayment(incomingPayment.getAmount(), incomingPayment.getRequestId()));
+        var paymentEntity = toPayment(paymentRequest);
+
+        // heavy processing here....
+        sleep(1000);
+
+        var payment = paymentRepository.save(paymentEntity.authorizePayment(paymentEntity.getAmount(), paymentEntity.getRequestId()));
+
+        clientNotifierService.notifyTransactionComplete(paymentRequest.getCallbackUrl(), payment);
     }
 
-    public Payment confirmPayment(Payment incomingPayment) {
-        final var originalPayment = paymentRepository.findByRequestId(incomingPayment.getRequestId());
-        Assert.isTrue(originalPayment.getPaymentStatus().getType().equals(PENDING_AUTHORIZATION), "Incoming Payment should be AUTHORIZED");
-        Assert.isTrue(!originalPayment.getAmount().equals(incomingPayment.getAmount()), "PRE-AUTHORIZED payment should have the full amount");
+    @Async
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void confirmPayment(PaymentDto paymentRequest) {
 
-        return paymentRepository.save(originalPayment.confirmPayment(incomingPayment));
+        var paymentEntity = toPayment(paymentRequest);
+
+        // heavy processing here....
+        sleep(2000);
+
+        paymentEntity = paymentRepository.save(paymentEntity.confirmPayment(paymentEntity));
+        clientNotifierService.notifyTransactionComplete(paymentRequest.getCallbackUrl(), paymentEntity);
     }
+
+    private void sleep(int miliseconds) {
+        try {
+            Thread.sleep(miliseconds);
+        } catch (InterruptedException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
 }

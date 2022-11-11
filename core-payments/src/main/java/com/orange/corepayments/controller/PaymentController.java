@@ -3,12 +3,14 @@ package com.orange.corepayments.controller;
 import com.orange.corepayments.client.CorePaymentDto;
 import com.orange.corepayments.client.CorePaymentResponse;
 import com.orange.corepayments.client.PaymentDto;
+import com.orange.corepayments.service.PaymentConfirmationOrchestrator;
 import com.orange.corepayments.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +18,15 @@ import java.util.List;
 
 import static com.orange.corepayments.client.PaymentStatusType.PENDING_AUTHORIZATION;
 import static com.orange.corepayments.client.PaymentStatusType.UNPROCESSED;
-import static com.orange.corepayments.converter.Converter.*;
+import static com.orange.corepayments.converter.Converter.toCorePaymentDtos;
 
 @RestController
 @RequestMapping("/payments")
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
-
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
-
+    private final PaymentConfirmationOrchestrator paymentConfirmationOrchestrator;
 
     @Operation(summary = "List of payments with statuses. Receives driver`s payments")
     @ApiResponses(value = {
@@ -38,7 +37,7 @@ public class PaymentController {
             @ApiResponse(responseCode = "404", description = "Data not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping()
     public CorePaymentResponse readPayments(@RequestParam List<String> requestIds) {
         final var payments = paymentService.findPayments(requestIds);
         return CorePaymentResponse.builder()
@@ -56,12 +55,11 @@ public class PaymentController {
             @ApiResponse(responseCode = "404", description = "Data not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @Async
     @PostMapping
-    public PaymentDto authorizePayment(@RequestBody CorePaymentDto paymentRequest) {
+    public ResponseEntity authorizePayment(@RequestBody CorePaymentDto paymentRequest) {
         Assert.isTrue(paymentRequest.getPaymentStatus().equals(UNPROCESSED), "Payment can only be UNPROCESSED");
-        final var authorizePayment = paymentService.authorizePayment(toPayment(paymentRequest));
-        return toPaymentDto(authorizePayment);
+        paymentService.authorizePayment(paymentRequest);
+        return ResponseEntity.accepted().build();
     }
 
 
@@ -74,11 +72,10 @@ public class PaymentController {
             @ApiResponse(responseCode = "404", description = "Data not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @Async
     @PutMapping
-    public PaymentDto confirmPayment(@RequestBody PaymentDto paymentRequest) {
+    public ResponseEntity confirmPayment(@RequestBody PaymentDto paymentRequest) {
         Assert.isTrue(paymentRequest.getPaymentStatus().equals(PENDING_AUTHORIZATION), "Payment can only be CONFIRMED");
-        final var payment = paymentService.confirmPayment(toPayment(paymentRequest));
-        return toPaymentDto(payment);
+        paymentConfirmationOrchestrator.confirmPayment(paymentRequest);
+        return ResponseEntity.accepted().build();
     }
 }

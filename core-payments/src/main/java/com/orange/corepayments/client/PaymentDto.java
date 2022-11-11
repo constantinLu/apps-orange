@@ -29,4 +29,6 @@ public class PaymentDto {
     private LocalDateTime updatedDate;
 
     private LocalDateTime createdDate;
+
+    private String callbackUrl;
 }

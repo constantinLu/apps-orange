@@ -42,7 +42,6 @@ public class Payment {
 
     private String requestId;
 
-
     public Optional<String> getReason() {
         return Optional.ofNullable(reason);
     }

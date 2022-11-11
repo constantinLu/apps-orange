@@ -1,12 +1,13 @@
 package com.orange.corepayments.client;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +24,8 @@ public class CorePaymentDto {
     private String requestId;
 
     private PaymentStatusType paymentStatus;
+
+    private String callbackUrl;
 
     private LocalDateTime updatedDate;
 
