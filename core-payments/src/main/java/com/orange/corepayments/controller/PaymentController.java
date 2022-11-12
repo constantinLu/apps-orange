@@ -64,7 +64,7 @@ public class PaymentController {
     }
 
 
-    @Operation(summary = "Confirmation of payment. Receives an authorized payment which will be CONFIRMED")
+    @Operation(summary = "Confirmation of payment. Receives an authorized payment which will be AUTHORIZED")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
@@ -74,8 +74,8 @@ public class PaymentController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping
-    public ResponseEntity confirmPayment(@RequestBody PaymentDto paymentRequest) {
-        Assert.isTrue(paymentRequest.getPaymentStatus().equals(PENDING_AUTHORIZATION), "Payment can only be CONFIRMED");
+    public ResponseEntity confirmPayment(@RequestBody CorePaymentDto paymentRequest) {
+        Assert.isTrue(paymentRequest.getPaymentStatus().equals(PENDING_AUTHORIZATION), "Payment can only be AUTHORIZED");
         paymentConfirmationOrchestrator.confirmPayment(paymentRequest);
         return ResponseEntity.accepted().build();
     }

@@ -1,7 +1,6 @@
 package com.orange.corepayments.service;
 
 import com.orange.corepayments.client.CorePaymentDto;
-import com.orange.corepayments.client.PaymentDto;
 import com.orange.corepayments.model.Payment;
 import com.orange.corepayments.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +23,10 @@ public class PaymentService {
         return paymentRepository.findByRequestIdIn(requestIds);
     }
 
+    public Payment find(Long id) {
+        return paymentRepository.findById(id).get();
+    }
+
     @Async
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void authorizePayment(CorePaymentDto paymentRequest) {
@@ -40,15 +43,13 @@ public class PaymentService {
 
     @Async
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void confirmPayment(PaymentDto paymentRequest) {
-
-        var paymentEntity = toPayment(paymentRequest);
+    public void confirmPayment(Payment incomingPayment) {
 
         // heavy processing here....
         sleep(1050);
 
-        paymentEntity = paymentRepository.save(paymentEntity.confirmPayment(paymentEntity));
-        clientNotifierService.notifyTransactionComplete(paymentEntity);
+        var payment = paymentRepository.save(incomingPayment.confirmPayment(incomingPayment));
+        clientNotifierService.notifyTransactionComplete(payment);
     }
 
     private void sleep(int miliseconds) {

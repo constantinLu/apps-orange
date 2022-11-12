@@ -1,4 +1,4 @@
-package com.orange.rouber.exception;
+package com.orange.corepayments.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

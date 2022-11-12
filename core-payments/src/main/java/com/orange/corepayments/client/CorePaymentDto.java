@@ -1,10 +1,12 @@
 package com.orange.corepayments.client;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -13,7 +15,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @Getter
 @Builder
-public class CorePaymentDto {
+public class CorePaymentDto implements Serializable {
 
     private BigDecimal amount;
 
@@ -25,7 +27,9 @@ public class CorePaymentDto {
 
     private PaymentStatusType paymentStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 }
