@@ -9,8 +9,15 @@ import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-public interface TripTestData extends PointTestData {
+public interface TripTestData extends PointTestData, PaymentTestData {
 
+
+    default Trip.TripBuilder aFinalizedTrip(User requestedBy, Driver assignedTo) {
+        return anOngoingTrip(requestedBy, assignedTo)
+                .endTrip(LocalDateTime.now())
+                .payment(aPayment().build())
+                .rating(4f);
+    }
     default Trip.TripBuilder anOngoingTrip(User requestedBy, Driver assignedTo) {
         return aTrip(requestedBy)
                 .startTrip(LocalDateTime.now().minus(2, SECONDS))
@@ -25,7 +32,7 @@ public interface TripTestData extends PointTestData {
                 .startLocation(aPoint().build())
                 .endLocation(aPoint().build())
                 .rating(null)
-                .requestedBy(null)
+                .requestedBy(requestedBy)
                 .assignedTo(null)
                 .startTrip(null)
                 .endTrip(null)

@@ -1,13 +1,17 @@
 package com.orange.rouber.client;
 
 
+import com.orange.rouber.client.corepayments.PaymentStatusType;
 import com.orange.rouber.model.Trip;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +19,7 @@ import java.util.UUID;
 @Builder
 public class PaymentDto {
 
+    @NotNull
     private BigDecimal paidPrice;
 
     private LocalDateTime startInitiation;
@@ -23,7 +28,11 @@ public class PaymentDto {
 
     private Trip trip;
 
+    @NotNull
     private String requestId;
+
+    @NotNull
+    private PaymentStatusType status;
 
     public Optional<LocalDateTime> getStartInitiation() {
         return Optional.ofNullable(startInitiation);

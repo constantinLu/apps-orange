@@ -3,7 +3,7 @@ package com.orange.rouber.controller;
 import com.orange.rouber.client.DriverDto;
 import com.orange.rouber.client.DriverProfileDto;
 import com.orange.rouber.client.TripInfoDto;
-import com.orange.rouber.converter.Converters;
+import com.orange.rouber.converter.Converter;
 import com.orange.rouber.service.DriverService;
 import com.orange.rouber.service.TripService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.orange.rouber.converter.Converters.*;
+import static com.orange.rouber.converter.Converter.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,7 +43,7 @@ public class DriverController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerDriver(@RequestBody DriverDto driverDto) {
+    public void registerDriver(@Valid @RequestBody DriverDto driverDto) {
         driverService.registerDriver(toDriver(driverDto));
     }
 
@@ -56,12 +58,12 @@ public class DriverController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{driverId}/trips")
-    public List<TripInfoDto> getDriverTripInfo(@PathVariable Long driverId) {
+    public List<TripInfoDto> getDriverTripInfo(@NotNull @PathVariable Long driverId) {
         final var trips = tripService.getDriverTrips(driverId);
         return trips.stream()
                 .map(t -> TripInfoDto.builder()
-                        .tripDto(Converters.toTripDto(t))
-                        .paymentDto(Converters.toPaymentDto(t.getPayment()))
+                        .tripDto(Converter.toTripDto(t))
+                        .paymentDto(Converter.toPaymentDto(t.getPayment()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -76,7 +78,7 @@ public class DriverController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("{driverId}/ratings")
-    public DriverDto getDriverRating(@PathVariable Long driverId) {
+    public DriverDto getDriverRating(@NotNull @PathVariable Long driverId) {
         final var driver = driverService.getDriver(driverId);
         return DriverDto.builder()
                 .rating(driver.getRating())

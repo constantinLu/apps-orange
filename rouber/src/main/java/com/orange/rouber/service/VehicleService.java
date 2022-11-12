@@ -25,6 +25,7 @@ public class VehicleService {
         final var driver = driverRepository.findById(driverId).orElseThrow();
         vehicle.setDriver(driver);
         vehicle.setState(ACTIVE);
+
         archiveOldVehicles(driver.getId());
         vehicleRepository.save(vehicle);
 
@@ -35,7 +36,7 @@ public class VehicleService {
     }
 
     private void archiveOldVehicles(Long driverId) {
-        final var oldVehicles = vehicleRepository.findByDriver_Id(driverId);
+        final var oldVehicles = vehicleRepository.findByDriver_IdAndState(driverId, ACTIVE);
         oldVehicles.forEach(vehicle -> {
             vehicle.setState(INACTIVE);
             vehicleRepository.save(vehicle);

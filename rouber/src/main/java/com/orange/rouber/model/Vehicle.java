@@ -35,6 +35,7 @@ public class Vehicle {
 
     private String color;
 
+    //registration date of the vehicle
     private LocalDate registerDate;
 
     private LocalDateTime createdDate;

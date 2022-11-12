@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.PUT;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,12 +37,14 @@ public class ClientNotifierServiceTest implements PaymentTestData {
 
         var url = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/payments/")
                 .path(payment.getRequestId()).encode().toUriString();
-        Mockito.when(restTemplate.exchange(eq(url), eq(PUT), any(), eq(CorePaymentDto.class)))
+        when(restTemplate.exchange(eq(url), eq(PUT), any(), eq(CorePaymentDto.class)))
                 .thenReturn(new ResponseEntity<>(CorePaymentDto.builder().build(), HttpStatus.OK));
 
         //when
         clientNotifierService.notifyTransactionComplete(payment);
 
+
+        //then
         verify(restTemplate).exchange(eq(url), eq(PUT), any(), eq(CorePaymentDto.class));
     }
 }

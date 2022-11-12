@@ -1,5 +1,6 @@
 package com.orange.rouber.controller;
 
+import com.orange.rouber.client.PaymentDto;
 import com.orange.rouber.client.corepayments.CorePaymentDto;
 import com.orange.rouber.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.orange.rouber.converter.Converter.toPaymentDtos;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,8 +32,8 @@ public class PaymentController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/driver/{driverId}")
-    List<CorePaymentDto> readDriverPayments(@PathVariable Long driverId) {
-        return paymentService.readDriverPayments(driverId);
+    List<PaymentDto> readDriverPayments(@PathVariable Long driverId) {
+        return toPaymentDtos(paymentService.readDriverPayments(driverId));
     }
 
     @Operation(summary = "Updates the payment status")

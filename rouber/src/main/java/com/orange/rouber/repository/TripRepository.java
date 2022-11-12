@@ -18,4 +18,6 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findByAssignedTo_IdAndStartTripBetween(Long id, LocalDateTime startOfTheDay, LocalDateTime endOfTheDay);
 
+    Trip findByRequestedBy_Id(Long userId);
+
 }

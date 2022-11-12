@@ -79,12 +79,12 @@ public class TripService {
         return findByDriverId(driverId);
     }
 
-    public Trip getDriverRatingsByTrip(Long tripId, Long driverId) {
-        return findByTripAndDriverIds(tripId, driverId);
+    public Trip getDriverRatingByTrip(Long tripId, Long driverId) {
+        return findByTripAndDriverId(tripId, driverId);
     }
 
     public void rateTrip(Long tripId, Long driverId, Float rating) {
-        final var tripToRate = findByTripAndDriverIds(tripId, driverId);
+        final var tripToRate = findByTripAndDriverId(tripId, driverId);
         tripToRate.setRating(rating);
 
         tripRepository.save(tripToRate);
@@ -110,6 +110,8 @@ public class TripService {
     private static long calculateTotalTimePerDay(List<Trip> trips) {
         return trips.stream()
                 .mapToLong(trip -> {
+                    Assert.isTrue(trip.getStartTrip() != null, "Start trip must be present");
+                    Assert.isTrue(trip.getEndTrip() != null, "End trip must be present");
                     final var difference = Duration.between(trip.getStartTrip(), trip.getEndTrip());
                     return difference.get(SECONDS);
                 })
@@ -126,10 +128,10 @@ public class TripService {
         return trips.stream()
                 .mapToDouble(t -> t.getPrice().doubleValue())
                 .average()
-                .orElse(Double.NaN);
+                .orElse(0);
     }
 
-    private Trip findByTripAndDriverIds(Long tripId, Long driverId) {
+    private Trip findByTripAndDriverId(Long tripId, Long driverId) {
         return tripRepository.findByIdAndAssignedTo_Id(tripId, driverId);
     }
 

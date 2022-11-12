@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UserDto {
 
-    @NotNull
+    @NotNull(message = "cannot be null")
     private String name;
 
     @NotNull

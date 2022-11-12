@@ -1,7 +1,6 @@
 package com.orange.rouber.controller;
 
 import com.orange.rouber.client.VehicleDto;
-import com.orange.rouber.converter.Converters;
 import com.orange.rouber.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-import static com.orange.rouber.converter.Converters.toVehicleDtos;
+import static com.orange.rouber.converter.Converter.toVehicle;
+import static com.orange.rouber.converter.Converter.toVehicleDtos;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,8 +36,8 @@ public class VehicleController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerVehicle(@RequestBody VehicleDto vehicleDto) {
-        vehicleService.registerVehicle(Converters.toVehicle(vehicleDto), vehicleDto.getOwnerId());
+    public void registerVehicle(@Valid @RequestBody VehicleDto vehicleDto) {
+        vehicleService.registerVehicle(toVehicle(vehicleDto), vehicleDto.getOwnerId());
     }
 
     @GetMapping("/history")

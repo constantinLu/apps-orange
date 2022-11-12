@@ -22,10 +22,10 @@ class PaymentRepositoryTest extends RouberTestSetup implements PaymentTestData, 
     @Test
     void should_by_driver_id() {
         //given
-        var user = userRepository.save(aUser().build());
-        var driver = driverRepository.save(aDriver().build());
-        var payment = paymentRepository.save(aPayment().build());
-        var trip = tripRepository.save(aTrip(user).payment(payment).build());
+        var user = add(aUser().build());
+        var driver = add(aDriver().build());
+        var payment = add(aPayment().build());
+        var trip = add(aTrip(user).payment(payment).build());
 
         //when
         var result = paymentRepository.findPaymentByTrip_assignedTo_id(driver.getId());
@@ -33,4 +33,19 @@ class PaymentRepositoryTest extends RouberTestSetup implements PaymentTestData, 
         //then
         assertThat(result.equals(List.of(payment)));
     }
+
+    void should_by_request_id() {
+        //given
+        var user = add(aUser().build());
+        var driver = add(aDriver().build());
+        var payment = add(aPayment().build());
+        var trip = tripRepository.save(aTrip(user).payment(payment).build());
+
+        //when
+        var result = paymentRepository.findByRequestId(payment.getRequestId());
+
+        //then
+        assertThat(result.equals(payment));
+    }
+
 }

@@ -2,7 +2,6 @@ package com.orange.rouber.controller;
 
 
 import com.orange.rouber.client.UserDto;
-import com.orange.rouber.converter.Converters;
 import com.orange.rouber.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+import static com.orange.rouber.converter.Converter.toUser;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +34,8 @@ public class UserController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@RequestBody UserDto userDto) {
-        userService.registerUser(Converters.toUser(userDto));
+    public void registerUser(@Valid @RequestBody UserDto userDto) {
+
+        userService.registerUser(toUser(userDto));
     }
 }

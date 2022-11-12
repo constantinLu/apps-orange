@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
-    List<Vehicle> findByDriver_Id(Long driverId);
+    List<Vehicle> findByDriver_IdAndState(Long driverId, Vehicle.State state);
 
     List<Vehicle> findByStateOrderByCreatedDateDesc(Vehicle.State state);
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Converters {
+public class Converter {
 
     public static Driver toDriver(DriverDto driverDto) {
         return Driver.builder()
@@ -38,7 +38,7 @@ public class Converters {
     public static Trip toTrip(TripDto tripDto) {
         return Trip.builder()
                 .price(tripDto.getPrice())
-                .rating(tripDto.getRating().floatValue())
+                .rating(tripDto.getRating())
                 .startLocation(coordinates(tripDto.getStart_lat(), tripDto.getStart_long()))
                 .endLocation(coordinates(tripDto.getEnd_lat(), tripDto.getEnd_long()))
                 .build();
@@ -65,14 +65,14 @@ public class Converters {
                 .start_long(trip.getStartLocation().getY())
                 .end_lat(trip.getEndLocation().getX())
                 .end_long(trip.getEndLocation().getY())
-                .requestedByUser(trip.getRequestedBy().getId())
-                .assignedTo(trip.getAssignedTo().getId())
+                .requestedByUser(trip.getRequestedBy() != null ? trip.getRequestedBy().getId() : null)
+                .assignedTo(trip.getAssignedTo() != null ? trip.getAssignedTo().getId() : null)
                 .build();
     }
 
     public static List<TripDto> toTripDtos(List<Trip> trips) {
         return trips.stream()
-                .map(Converters::toTripDto)
+                .map(Converter::toTripDto)
                 .collect(Collectors.toList());
     }
 
@@ -87,7 +87,14 @@ public class Converters {
                 .registerDate(vehicle.getRegisterDate())
                 .createdDate(vehicle.getCreatedDate())
                 .state(vehicle.getState())
+                .ownerId(vehicle.getDriver().getId())
                 .build();
+    }
+
+    public static List<PaymentDto> toPaymentDtos(List<Payment> payments) {
+        return payments.stream()
+                .map(Converter::toPaymentDto)
+                .collect(Collectors.toList());
     }
 
     public static PaymentDto toPaymentDto(Payment payment) {
@@ -101,7 +108,7 @@ public class Converters {
 
     public static List<VehicleDto> toVehicleDtos(List<Vehicle> vehicles) {
         return vehicles.stream()
-                .map(Converters::toVehicleDto)
+                .map(Converter::toVehicleDto)
                 .collect(Collectors.toList());
     }
 

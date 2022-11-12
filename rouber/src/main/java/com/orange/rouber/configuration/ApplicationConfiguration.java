@@ -19,8 +19,8 @@ public class ApplicationConfiguration {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("SpringShop API")
-                        .description("Spring shop sample application")
+                .info(new Info().title("Rouber API")
+                        .description("Ride Share App")
                         .version("v0.0.1")
                         .license(new License()
                                 .name("Apache 2.0")

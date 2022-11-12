@@ -12,10 +12,8 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.orange.rouber.client.corepayments.PaymentStatusType.*;
 
@@ -28,17 +26,8 @@ public class PaymentService {
 
     private final CorePaymentService corePaymentService;
 
-    public List<CorePaymentDto> readDriverPayments(Long driverId) {
-        final var payments = paymentRepository.findPaymentByTrip_assignedTo_id(driverId);
-        final var requestIds = payments.stream()
-                .map(Payment::getRequestId)
-                .collect(Collectors.toList());
-
-        final var processedPayments = Objects.requireNonNull
-                (corePaymentService.getPayments(requestIds).getBody(),
-                        "Payment list cannot be null");
-
-        return processedPayments.getPayments();
+    public List<Payment> readDriverPayments(Long driverId) {
+        return paymentRepository.findPaymentByTrip_assignedTo_id(driverId);
     }
 
     public Payment createPayment(Trip trip) {

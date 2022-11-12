@@ -14,12 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.orange.rouber.converter.Converters.toTrip;
-import static com.orange.rouber.converter.Converters.toTripDtos;
+import static com.orange.rouber.converter.Converter.toTrip;
+import static com.orange.rouber.converter.Converter.toTripDtos;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -27,7 +28,7 @@ import static com.orange.rouber.converter.Converters.toTripDtos;
 @RequestMapping("/trips")
 public class TripController {
 
-    TripService tripService;
+    private final TripService tripService;
 
 
     @Operation(summary = "All available trips. Get the list of available trips")
@@ -70,9 +71,9 @@ public class TripController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("{tripId}/ratings")
-    public TripDto getDriverRatings(@PathVariable Long tripId, @RequestBody TripDto tripDto) {
+    public TripDto getDriverRating(@PathVariable Long tripId, @RequestBody TripDto tripDto) {
         Assert.notNull(tripDto.getAssignedTo(), "Driver ID: cannot be null");
-        final var trip = tripService.getDriverRatingsByTrip(tripId, tripDto.getAssignedTo());
+        final var trip = tripService.getDriverRatingByTrip(tripId, tripDto.getAssignedTo());
         return TripDto.builder()
                 .rating(trip.getRating())
                 .build();
@@ -90,8 +91,7 @@ public class TripController {
     })
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTrip(@RequestBody TripDto tripDto) {
-        assert tripDto.getRequestedByUser() != null;
+    public void createTrip(@Valid @RequestBody TripDto tripDto) {
         tripService.createTrip(toTrip(tripDto), tripDto.getRequestedByUser());
     }
 
