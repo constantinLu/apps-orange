@@ -1,5 +1,6 @@
 package com.orange.corepayments.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.corepayments.client.CorePaymentResponse;
 import data.CorePaymentTestData;
 import data.PaymentTestData;
@@ -30,6 +31,9 @@ class PaymentControllerTest extends CorePaymentsTestSetup implements PaymentTest
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     @SneakyThrows
     @Test
@@ -123,6 +127,7 @@ class PaymentControllerTest extends CorePaymentsTestSetup implements PaymentTest
     void should_throw_exception_when_payment_is_not_authorized() {
         //given
         var authorizedPayment = aCorePaymentDto().paymentStatus(PENDING_CONFIRMATION).build();
+
 
         // expect
         var mvcResult = mockMvc.perform(put("/payments")
